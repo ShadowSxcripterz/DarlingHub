@@ -1,83 +1,101 @@
--- Darling Hub UI (Zero Two Theme) [Universal] --
--- Fully touchscreen + smooth transitions --
+-- Darling Hub UI (Versi Update)
+local TweenService = game:GetService("TweenService")
+local UIS = game:GetService("UserInputService")
 
+-- UI utama
 local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
-ScreenGui.Name = "DarlingHubUI"
+ScreenGui.Name = "DarlingHub"
 ScreenGui.ResetOnSpawn = false
 
-local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 400, 0, 250)
-mainFrame.Position = UDim2.new(0.5, -200, 0.5, -125)
-mainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-mainFrame.BorderSizePixel = 0
-mainFrame.Visible = true
-mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-mainFrame.Parent = ScreenGui
+local MainFrame = Instance.new("Frame", ScreenGui)
+MainFrame.Size = UDim2.new(0, 300, 0, 200)
+MainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
+MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+MainFrame.BackgroundTransparency = 0.3
+MainFrame.BorderSizePixel = 0
+MainFrame.Active = true
+MainFrame.Draggable = true
 
-local UICorner = Instance.new("UICorner", mainFrame)
-UICorner.CornerRadius = UDim.new(0, 10)
-
-local title = Instance.new("TextLabel", mainFrame)
-title.Size = UDim2.new(1, 0, 0, 40)
-title.BackgroundTransparency = 1
-title.Text = "Darling Hub"
-title.Font = Enum.Font.GothamBold
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.TextScaled = true
-
-local partButton = Instance.new("TextButton", mainFrame)
-partButton.Size = UDim2.new(0.8, 0, 0, 40)
-partButton.Position = UDim2.new(0.1, 0, 0.3, 0)
-partButton.Text = "Part Name"
-partButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-partButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-partButton.Font = Enum.Font.Gotham
-partButton.TextScaled = true
-Instance.new("UICorner", partButton)
-
-local detailText = Instance.new("TextLabel", mainFrame)
-detailText.Position = UDim2.new(0.1, 0, 0.55, 0)
-detailText.Size = UDim2.new(0.8, 0, 0, 40)
-detailText.Text = "workspace.Model.Part"
-detailText.Font = Enum.Font.Gotham
-detailText.TextColor3 = Color3.fromRGB(255, 255, 255)
-detailText.TextScaled = true
-detailText.BackgroundTransparency = 1
-
-local closeBtn = Instance.new("ImageButton", mainFrame)
-closeBtn.Size = UDim2.new(0, 24, 0, 24)
-closeBtn.Position = UDim2.new(0, 8, 0, 8)
+-- Ujung kiri atas tombol X
+local closeBtn = Instance.new("TextButton", MainFrame)
+closeBtn.Size = UDim2.new(0, 30, 0, 30)
+closeBtn.Position = UDim2.new(0, 5, 0, 5)
+closeBtn.Text = "X"
+closeBtn.TextColor3 = Color3.new(1,1,1)
 closeBtn.BackgroundTransparency = 1
-closeBtn.Image = "rbxassetid://3926305904" -- built-in X icon (white)
+closeBtn.Font = Enum.Font.GothamBold
+closeBtn.TextSize = 18
 
-local iconZeroTwo = Instance.new("ImageButton", ScreenGui)
-iconZeroTwo.Size = UDim2.new(0, 50, 0, 50)
-iconZeroTwo.Position = UDim2.new(0, 10, 1, -60)
-iconZeroTwo.BackgroundTransparency = 1
-iconZeroTwo.Visible = false
--- No icon image assigned (removed on request)
+-- Icon Zero Two
+local iconBtn = Instance.new("TextButton", ScreenGui)
+iconBtn.Size = UDim2.new(0, 50, 0, 50)
+iconBtn.Position = UDim2.new(0, 20, 0, 20)
+iconBtn.Text = "Z"
+iconBtn.TextColor3 = Color3.fromRGB(255, 105, 180) -- Pink Zero Two
+iconBtn.TextSize = 26
+iconBtn.Font = Enum.Font.GothamBlack
+iconBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+iconBtn.Visible = false
+iconBtn.BorderSizePixel = 0
 
--- Smooth transitions
-local TweenService = game:GetService("TweenService")
-
-local function fadeOutUI()
-	TweenService:Create(mainFrame, TweenInfo.new(0.3), {Position = UDim2.new(0.5, -200, 1.5, 0)}):Play()
-	task.wait(0.3)
-	mainFrame.Visible = false
-	iconZeroTwo.Visible = true
+-- Tombol fitur
+local features = {"Fly", "No Clip", "Part Name"}
+for i, name in ipairs(features) do
+	local btn = Instance.new("TextButton", MainFrame)
+	btn.Size = UDim2.new(0, 260, 0, 30)
+	btn.Position = UDim2.new(0, 20, 0, 40 + (i - 1) * 40)
+	btn.Text = name
+	btn.TextColor3 = Color3.new(1,1,1)
+	btn.Font = Enum.Font.Gotham
+	btn.TextSize = 14
+	btn.BackgroundTransparency = 1
+	btn.BorderSizePixel = 2
+	btn.BorderColor3 = Color3.fromRGB(255, 0, 0)
 end
 
-local function fadeInUI()
-	mainFrame.Position = UDim2.new(0.5, -200, 1.5, 0)
-	mainFrame.Visible = true
-	iconZeroTwo.Visible = false
-	TweenService:Create(mainFrame, TweenInfo.new(0.3), {Position = UDim2.new(0.5, -200, 0.5, -125)}):Play()
+-- Transisi ke icon
+local function hideMain()
+	local tween = TweenService:Create(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -150, 1, 100)})
+	tween:Play()
+	tween.Completed:Wait()
+	MainFrame.Visible = false
+	iconBtn.Visible = true
 end
 
-closeBtn.MouseButton1Click:Connect(fadeOutUI)
-iconZeroTwo.MouseButton1Click:Connect(fadeInUI)
+-- Transisi ke UI utama
+local function showMain()
+	MainFrame.Visible = true
+	local tween = TweenService:Create(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -150, 0.5, -100)})
+	tween:Play()
+	iconBtn.Visible = false
+end
 
--- Touchscreen ready
-partButton.AutoButtonColor = true
-closeBtn.AutoButtonColor = true
-iconZeroTwo.AutoButtonColor = true
+closeBtn.MouseButton1Click:Connect(hideMain)
+iconBtn.MouseButton1Click:Connect(showMain)
+
+-- Drag iconBtn (touch-friendly)
+local dragging, dragInput, dragStart, startPos
+local function dragify(gui)
+	gui.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+			dragging = true
+			dragStart = input.Position
+			startPos = gui.Position
+
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+				end
+			end)
+		end
+	end)
+
+	gui.InputChanged:Connect(function(input)
+		if dragging and (input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseMovement) then
+			local delta = input.Position - dragStart
+			gui.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+		end
+	end)
+end
+
+dragify(iconBtn)
